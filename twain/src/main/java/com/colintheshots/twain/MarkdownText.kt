@@ -51,7 +51,8 @@ fun MarkdownText(
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
     @IdRes viewId: Int? = null,
-    textTruncated: (Boolean) -> Unit = {}
+    textTruncated: (Boolean) -> Unit = {},
+    isSelectable: Boolean = false,
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
@@ -69,7 +70,8 @@ fun MarkdownText(
                 fontResource = fontResource,
                 style = style,
                 viewId = viewId,
-                textTruncated = textTruncated
+                textTruncated = textTruncated,
+                isSelectable = isSelectable,
             )
         },
         update = { textView ->
@@ -88,7 +90,8 @@ private fun createTextView(
     @FontRes fontResource: Int? = null,
     style: TextStyle,
     @IdRes viewId: Int? = null,
-    textTruncated: (Boolean) -> Unit
+    textTruncated: (Boolean) -> Unit,
+    isSelectable: Boolean = false,
 ): TextView {
 
     val textColor = color.takeOrElse { style.color.takeOrElse { defaultColor } }
@@ -100,7 +103,7 @@ private fun createTextView(
         )
     )
     return TextView(context).apply {
-
+        setTextIsSelectable(isSelectable)
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
